@@ -2,7 +2,7 @@ const domain = "http://localhost:5000";
 const UserProfiles = require("../models/userProfile");
 // Helper function to send error responses
 const sendErrorResponse = (res, error) => {
-  console.log(error);
+  // console.log(error);
   res.status(500).json({ msg: error.message });
 };
 
@@ -40,10 +40,7 @@ const updateUserProfile = async (req, res) => {
 // Get user profile
 const getUserProfile = async (req, res) => {
   try {
-    const profile = await UserProfiles.findOne({ user: req.user._id }).populate(
-      "user",
-      ["name", "email"]
-    );
+    const profile = await UserProfiles.findOne({ user: req.user.id });
     if (!profile) {
       return res.status(404).json({ msg: "Profile not found" });
     }

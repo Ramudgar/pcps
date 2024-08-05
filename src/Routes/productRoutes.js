@@ -9,7 +9,7 @@ const {
   updateProduct,
   deleteProduct,
   getProduct,
-  getProducts
+  searchProducts
 } = require('../controllers/productController');
 
 /**
@@ -60,6 +60,6 @@ router.get('/:id', getProduct);
  * @param {Object} res - Express response object
  * @returns {Object} response - The response object containing an array of products
  */
-router.get('/', getProducts);
+router.get('/', searchProducts);
 
 module.exports = router;

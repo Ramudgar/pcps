@@ -4,7 +4,7 @@ const domain = "http://localhost:5000";
 
 // Helper function to send error responses
 const sendErrorResponse = (res, error) => {
-  console.log(error);
+  // console.log(error);
   res.status(500).json({ msg: error.message });
 };
 
@@ -30,7 +30,6 @@ const createProduct = async (req, res) => {
       rating,
       numReviews,
       countInStock,
-     
     };
 
     if (req.file) {
@@ -65,7 +64,7 @@ const updateProduct = async (req, res) => {
       countInStock,
     } = req.body;
     let updateData = {
-      category:category,
+      category: category,
       name,
       price,
       description,
@@ -98,10 +97,11 @@ const updateProduct = async (req, res) => {
   }
 };
 
-// Get all products (Public)
-const getProducts = async (req, res) => {
+// Search and sort products (Public)
+const searchProducts = async (req, res) => {
   const { search, sort } = req.query;
-  let query = {};
+  let query = {
+  };
   if (search) {
     query.name = { $regex: search, $options: "i" };
   }
@@ -135,7 +135,21 @@ const getProduct = async (req, res) => {
       return res.status(404).json({ msg: "Product not found" });
     }
 
-    res.status(200).json(product);
+    res
+      .status(200)
+      .json({ msg: "Product found successfully", product: product });
+  } catch (error) {
+    sendErrorResponse(res, error);
+  }
+};
+
+// get all products
+const getAllProducts = async (req, res) => {
+  try {
+    const products = await Product.find();
+    res
+      .status(200)
+      .json({ msg: "products found successfully", products: products });
   } catch (error) {
     sendErrorResponse(res, error);
   }
@@ -158,10 +172,21 @@ const deleteProduct = async (req, res) => {
   }
 };
 
+// delete all products
+
+const deleteAllProducts = async (req, res) => {
+  try {
+    await Product.deleteMany();
+    res.status(200).json({ msg: "All products deleted successfully" });
+  } catch (error) {
+    sendErrorResponse(res, error);
+  }
+};
+
 module.exports = {
   createProduct,
   updateProduct,
-  getProducts,
+  searchProducts,
   getProduct,
   deleteProduct,
 };

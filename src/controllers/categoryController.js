@@ -59,18 +59,12 @@ const getCategory = async (req, res) => {
 const updateCategory = async (req, res) => {
   const { name, description } = req.body;
   try {
-    const category = await Category.findOne({ _id: req.params.id });
+    const category = await Category.findById(req.params.id);
     if (!category) {
       return res.status(404).json({ msg: "Category not found" });
     }
-    if (!name) {
-      category.description = description;
-    } else if (!description) {
-      category.name = name;
-    } else {
-      category.name = name;
-      category.description = description;
-    }
+    category.name = name || category.name;
+    category.description = description || category.description;
 
     await category.save();
     return res
