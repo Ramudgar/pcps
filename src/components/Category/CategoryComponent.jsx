@@ -3,6 +3,7 @@ import axiosInstance from "../../Config/axiosConfig";
 import { AiFillEdit, AiFillDelete } from "react-icons/ai";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 
 const CategoryComponent = () => {
   const [categories, setCategories] = useState([]);
@@ -59,7 +60,14 @@ const CategoryComponent = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await axiosInstance.delete(`/api/category/delete/${id}`);
+      const response = await axios.delete(
+        `http://localhost:5000/api/category/delete/${id}`,
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      );
       toast.success(response.data.msg);
       fetchCategories();
     } catch (error) {
