@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axiosInstance from "../../Config/axiosConfig";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 
 const AddProductComponent = () => {
   const [formData, setFormData] = useState({
@@ -9,7 +10,7 @@ const AddProductComponent = () => {
     name: "",
     price: "",
     description: "",
-    productImage: null,
+    productImage: "",
     brand: "",
     rating: "",
     numReviews: "",
@@ -47,22 +48,27 @@ const AddProductComponent = () => {
     data.append("numReviews", formData.numReviews);
     data.append("countInStock", formData.countInStock);
 
+    console.log("Data:", data);
+    console.log("FormData:", formData);
+
     try {
-      const response = await axiosInstance.post("/api/products", data);
+      const response = await axiosInstance.post("/api/products", data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       toast.success(response.data.msg);
       console.log("Product added successfully:", response.data);
     } catch (error) {
       console.error("Error adding product:", error);
-      toast.error(error.response.data.msg);
+      toast.error(error.response?.data?.msg || "An error occurred");
     }
   };
 
-  //   to get category from the database
   useEffect(() => {
     const fetchCategory = async () => {
       try {
         const response = await axiosInstance.get("/api/category/all");
-        // console.log("Category fetched successfully:", response.data.categories);
         setCategory(response.data.categories);
       } catch (error) {
         console.error("Error fetching category:", error);
@@ -197,12 +203,14 @@ const AddProductComponent = () => {
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         />
       </div>
-      <button
-        type="submit"
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-      >
-        Add Product
-      </button>
+      <div className="flex items-center justify-between">
+        <button
+          type="submit"
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+        >
+          Add Product
+        </button>
+      </div>
     </form>
   );
 };

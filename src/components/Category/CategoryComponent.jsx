@@ -17,7 +17,7 @@ const CategoryComponent = () => {
   const fetchCategories = async () => {
     try {
       const response = await axiosInstance.get("/api/category/all");
-      // console.log(response);
+      // console.log(response.data.categories);
       setCategories(response.data.categories);
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -28,10 +28,10 @@ const CategoryComponent = () => {
     const { name, value } = e.target;
     // const name = e.target.name;
     // const value = e.target.value;
-    setNewCategory({ ...newCategory, [name]: value });
+    setNewCategory({ ...newCategory,[name]: value });
   };
 
-  console.log(newCategory);
+  // console.log(newCategory);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -48,6 +48,7 @@ const CategoryComponent = () => {
           "/api/category/create",
           newCategory
         );
+        // console.log(response);
         toast.success(response.data.msg);
       }
       setNewCategory({ name: "", description: "" });
@@ -76,6 +77,7 @@ const CategoryComponent = () => {
           },
         }
       );
+      // console.log(response);
       toast.success(response.data.msg);
       fetchCategories();
     } catch (error) {
@@ -126,7 +128,7 @@ const CategoryComponent = () => {
       <div>
         <h2 className="text-xl font-semibold mb-2">Category List</h2>
         <ul>
-          {categories.map((category) => (
+        {categories.map((category) => (
             <li
               key={category._id}
               className="flex justify-between items-center border-b border-gray-300 py-2"

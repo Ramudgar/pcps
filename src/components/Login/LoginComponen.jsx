@@ -41,10 +41,10 @@ const LoginComponent = () => {
           "http://localhost:5000/api/auth/login",
           loginData
         );
-        console.log(response);
+        // console.log(response.data);
         // set token in local storage
         localStorage.setItem("token", response.data.token);
-        console.log(response.data.token);
+        // console.log(response.data.token);
 
         // show success message
         toast.success("Login successful");
