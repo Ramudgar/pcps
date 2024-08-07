@@ -1,31 +1,35 @@
-import React, { useState } from 'react';
-import axiosInstance from '../../Config/axiosConfig';
+import React, { useEffect, useState } from "react";
+import axiosInstance from "../../Config/axiosConfig";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AddProductComponent = () => {
   const [formData, setFormData] = useState({
-    category: '',
-    name: '',
-    price: '',
-    description: '',
+    category: "",
+    name: "",
+    price: "",
+    description: "",
     productImage: null,
-    brand: '',
-    rating: '',
-    numReviews: '',
-    countInStock: ''
+    brand: "",
+    rating: "",
+    numReviews: "",
+    countInStock: "",
   });
+
+  const [category, setCategory] = useState([]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value
+      [name]: value,
     });
   };
 
   const handleFileChange = (e) => {
     setFormData({
       ...formData,
-      productImage: e.target.files[0]
+      productImage: e.target.files[0],
     });
   };
 
@@ -33,39 +37,68 @@ const AddProductComponent = () => {
     e.preventDefault();
 
     const data = new FormData();
-    data.append('category', formData.category);
-    data.append('name', formData.name);
-    data.append('price', formData.price);
-    data.append('description', formData.description);
-    data.append('productImage', formData.productImage);
-    data.append('brand', formData.brand);
-    data.append('rating', formData.rating);
-    data.append('numReviews', formData.numReviews);
-    data.append('countInStock', formData.countInStock);
+    data.append("category", formData.category);
+    data.append("name", formData.name);
+    data.append("price", formData.price);
+    data.append("description", formData.description);
+    data.append("productImage", formData.productImage);
+    data.append("brand", formData.brand);
+    data.append("rating", formData.rating);
+    data.append("numReviews", formData.numReviews);
+    data.append("countInStock", formData.countInStock);
 
     try {
-      const response = await axiosInstance.post('/products', data);
-      console.log('Product added successfully:', response.data);
+      const response = await axiosInstance.post("/api/products", data);
+      toast.success(response.data.msg);
+      console.log("Product added successfully:", response.data);
     } catch (error) {
-      console.error('Error adding product:', error);
+      console.error("Error adding product:", error);
+      toast.error(error.response.data.msg);
     }
   };
 
+  //   to get category from the database
+  useEffect(() => {
+    const fetchCategory = async () => {
+      try {
+        const response = await axiosInstance.get("/api/category/all");
+        // console.log("Category fetched successfully:", response.data.categories);
+        setCategory(response.data.categories);
+      } catch (error) {
+        console.error("Error fetching category:", error);
+      }
+    };
+    fetchCategory();
+  }, []);
+
   return (
-    <form onSubmit={handleSubmit} className="max-w-xl mx-auto p-8 bg-white rounded-lg shadow-lg m-8">
+    <form
+      onSubmit={handleSubmit}
+      className="max-w-xl mx-auto p-8 bg-white rounded-lg shadow-lg m-8"
+    >
+      <ToastContainer />
       <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2">Category:</label>
-        <input
-          type="text"
+        <label className="block text-gray-700 text-sm font-bold mb-2">
+          Category:
+        </label>
+        <select
           name="category"
           value={formData.category}
           onChange={handleChange}
           required
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        />
+        >
+          {category.map((cat) => (
+            <option key={cat._id} value={cat._id}>
+              {cat.name}
+            </option>
+          ))}
+        </select>
       </div>
       <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2">Name:</label>
+        <label className="block text-gray-700 text-sm font-bold mb-2">
+          Name:
+        </label>
         <input
           type="text"
           name="name"
@@ -76,7 +109,9 @@ const AddProductComponent = () => {
         />
       </div>
       <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2">Price:</label>
+        <label className="block text-gray-700 text-sm font-bold mb-2">
+          Price:
+        </label>
         <input
           type="number"
           name="price"
@@ -87,7 +122,9 @@ const AddProductComponent = () => {
         />
       </div>
       <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2">Description:</label>
+        <label className="block text-gray-700 text-sm font-bold mb-2">
+          Description:
+        </label>
         <textarea
           name="description"
           value={formData.description}
@@ -97,7 +134,9 @@ const AddProductComponent = () => {
         ></textarea>
       </div>
       <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2">Product Image:</label>
+        <label className="block text-gray-700 text-sm font-bold mb-2">
+          Product Image:
+        </label>
         <input
           type="file"
           name="productImage"
@@ -107,7 +146,9 @@ const AddProductComponent = () => {
         />
       </div>
       <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2">Brand:</label>
+        <label className="block text-gray-700 text-sm font-bold mb-2">
+          Brand:
+        </label>
         <input
           type="text"
           name="brand"
@@ -118,7 +159,9 @@ const AddProductComponent = () => {
         />
       </div>
       <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2">Rating:</label>
+        <label className="block text-gray-700 text-sm font-bold mb-2">
+          Rating:
+        </label>
         <input
           type="number"
           name="rating"
@@ -129,7 +172,9 @@ const AddProductComponent = () => {
         />
       </div>
       <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2">Number of Reviews:</label>
+        <label className="block text-gray-700 text-sm font-bold mb-2">
+          Number of Reviews:
+        </label>
         <input
           type="number"
           name="numReviews"
@@ -140,7 +185,9 @@ const AddProductComponent = () => {
         />
       </div>
       <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2">Count in Stock:</label>
+        <label className="block text-gray-700 text-sm font-bold mb-2">
+          Count in Stock:
+        </label>
         <input
           type="number"
           name="countInStock"
