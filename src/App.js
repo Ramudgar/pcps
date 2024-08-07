@@ -18,6 +18,7 @@ import ContactComponent from "./components/Contact/ContactComponent";
 import RegistrationForm from "./components/Register/RegisterComponent";
 import LoginComponent from "./components/Login/LoginComponen";
 import CategoryComponent from "./components/Category/CategoryComponent";
+import AddProductComponent from "./components/AddProduct/AddProductComponent";
 
 class App extends Component {
   render() {
@@ -44,6 +45,7 @@ class App extends Component {
             <Route path="/signup" element={<RegistrationForm />} />
             <Route path="/login" element={<LoginComponent />} />
             <Route path="/category" element={<CategoryComponent />} />
+            <Route path="/addproduct" element={<AddProductComponent />} />
           </Routes>
         </div>
       </Router>

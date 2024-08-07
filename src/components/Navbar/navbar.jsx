@@ -53,6 +53,12 @@ function Navbar() {
               >
                 category
               </Link>
+              <Link
+                to="/addproduct"
+                className="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300"
+              >
+                Add Product
+              </Link>
             </div>
           </div>
           {/* Secondary Navbar items */}
@@ -142,6 +148,14 @@ function Navbar() {
                 className="block text-sm px-2 py-4 hover:bg-green-500 transition duration-300"
               >
                 category
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/addproduct"
+                className="block text-sm px-2 py-4 hover:bg-green-500 transition duration-300"
+              >
+                Add Product
               </Link>
             </li>
             <li>

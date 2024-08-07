@@ -17,6 +17,7 @@ const CategoryComponent = () => {
   const fetchCategories = async () => {
     try {
       const response = await axiosInstance.get("/api/category/all");
+      // console.log(response);
       setCategories(response.data.categories);
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -25,8 +26,12 @@ const CategoryComponent = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    // const name = e.target.name;
+    // const value = e.target.value;
     setNewCategory({ ...newCategory, [name]: value });
   };
+
+  console.log(newCategory);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -60,11 +65,14 @@ const CategoryComponent = () => {
 
   const handleDelete = async (id) => {
     try {
+      const token=localStorage.getItem("token");
       const response = await axios.delete(
         `http://localhost:5000/api/category/delete/${id}`,
         {
           headers: {
-            Authorization: localStorage.getItem("token"),
+            Authorization: token,
+            // if Bearer is not present in your token
+            // Authorization: `Bearer ${token}`,
           },
         }
       );
