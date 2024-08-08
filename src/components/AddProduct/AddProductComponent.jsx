@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axiosInstance from "../../Config/axiosConfig";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
 
 const AddProductComponent = () => {
   const [formData, setFormData] = useState({
@@ -66,15 +65,24 @@ const AddProductComponent = () => {
   };
 
   useEffect(() => {
-    const fetchCategory = async () => {
+    const fetchCategories = async () => {
       try {
         const response = await axiosInstance.get("/api/category/all");
-        setCategory(response.data.categories);
+        const categories = response.data.categories;
+        setCategory(categories);
+
+        // Set default category to the first one if available
+        if (categories.length > 0) {
+          setFormData((prevFormData) => ({
+            ...prevFormData,
+            category: categories[0]._id,
+          }));
+        }
       } catch (error) {
-        console.error("Error fetching category:", error);
+        console.error("Error fetching categories:", error);
       }
     };
-    fetchCategory();
+    fetchCategories();
   }, []);
 
   return (
