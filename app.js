@@ -49,11 +49,16 @@ const profileRoutes = require("./src/Routes/ProfileRoutes");
 const categoryRoutes = require("./src/Routes/categoryRoute");
 const productRoutes = require("./src/Routes/productRoutes");
 const app = express();
-const cors=require('cors')
+const cors = require("cors");
 const port = 5000;
 connectDB();
 app.use(express.json());
-app.use(cors());
+ 
+
+app.use(cors((
+  origin = "http://localhost:3000")
+  , (credentials = true)
+));
 
 app.use("/api/auth/", authRoutes);
 
