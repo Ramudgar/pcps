@@ -14,6 +14,15 @@ const ProtectedRoute = ({ role, children }) => {
   }
 
   return children ? children : <Outlet />;
+  // description of outlet
+// eslint-disable-next-line no-lone-blocks, no-unreachable
+{/* <Route path="dashboard" element={<ProtectedRoute />} >
+  <Route path="analytics" element={<Analytics />} />
+  <Route path="reports" element={<Reports />} />
+  <Route path="settings" element={<Settings />} />
+</Route> */}
 };
+
+
 
 export default ProtectedRoute;
